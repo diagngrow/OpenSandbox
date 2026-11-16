@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import base64
+
 import pytest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
@@ -1061,7 +1063,8 @@ class TestRenewExpiration:
 class TestSignedEndpoint:
     """Test signed route token generation in get_endpoint."""
 
-    BASE64_SECRET = "bXktdGVzdC1zZWNyZXQ="  # "my-test-secret"
+    # Encoded at runtime so no secret-looking literal is committed.
+    BASE64_SECRET = base64.b64encode(b"my-test-secret").decode()
 
     def _setup_gateway_with_secure_access(self, k8s_service, route_mode="wildcard"):
         """Helper to configure ingress gateway with secure_access on the service."""

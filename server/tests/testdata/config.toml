@@ -15,7 +15,7 @@
 [server]
 host = "127.0.0.1"
 port = 9000
-api_key = "test-api-key-12345"
+api_key = "not-a-real-key"
 
 [log]
 level = "DEBUG"

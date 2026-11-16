@@ -825,7 +825,8 @@ var _ = Describe("PauseResume", Ordered, func() {
 
 			By("patching registry push secret to invalid value (invalid docker config)")
 			// Create an invalid docker config JSON (base64 encoded)
-			invalidConfig := `{"auths":{"docker-registry.default.svc.cluster.local:5000":{"username":"invalid","password":"wrong","auth":"aW52YWxpZDp3cm9uZw=="}}}`
+			invalidAuth := base64.StdEncoding.EncodeToString([]byte("invalid:wrong"))
+			invalidConfig := fmt.Sprintf(`{"auths":{"docker-registry.default.svc.cluster.local:5000":{"username":"invalid","password":"wrong","auth":"%s"}}}`, invalidAuth)
 			encoded := base64.StdEncoding.EncodeToString([]byte(invalidConfig))
 			patchData := fmt.Sprintf(`{"data":{".dockerconfigjson":"%s"}}`, encoded)
 			cmd = exec.Command("kubectl", "patch", "secret", "registry-snapshot-push-secret", "-n", pauseResumeNamespace,
@@ -1003,7 +1004,8 @@ var _ = Describe("PauseResume", Ordered, func() {
 			}, 2*time.Minute).Should(Succeed())
 
 			By("patching registry push secret to invalid value (invalid docker config)")
-			invalidConfig := `{"auths":{"docker-registry.default.svc.cluster.local:5000":{"username":"invalid","password":"wrong","auth":"aW52YWxpZDp3cm9uZw=="}}}`
+			invalidAuth := base64.StdEncoding.EncodeToString([]byte("invalid:wrong"))
+			invalidConfig := fmt.Sprintf(`{"auths":{"docker-registry.default.svc.cluster.local:5000":{"username":"invalid","password":"wrong","auth":"%s"}}}`, invalidAuth)
 			encoded := base64.StdEncoding.EncodeToString([]byte(invalidConfig))
 			patchData := fmt.Sprintf(`{"data":{".dockerconfigjson":"%s"}}`, encoded)
 			cmd = exec.Command("kubectl", "patch", "secret", "registry-snapshot-push-secret", "-n", pauseResumeNamespace,

@@ -34,7 +34,7 @@ from opensandbox_server.main import app  # noqa: E402
 
 @pytest.fixture(scope="session")
 def test_api_key() -> str:
-    return "test-api-key-12345"
+    return "not-a-real-key"
 
 
 @pytest.fixture(scope="function")
